@@ -16,6 +16,7 @@
     <div class="col-lg-9">
         <ul id="messages" class="list-group"></ul>
         <form action="">
+            <h5 hidden="true" id="writting"></h5>
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Escribe tu mensaje" id="msg" autocomplete="off">
             <span class="input-group-btn">
@@ -63,6 +64,27 @@
         socket.on('del_user_conn', function(msg){
             $('#' + msg).remove();
         });
+        socket.on('user_writting',function(msg){
+            var aux = " está escribiendo";
+            aux = msg + aux;
+            console.log(aux);
+            $('#writting').text(aux).show('slow')
+
+        });
+        socket.on('user_not_writting',function(){
+           $('#writting').hide('slow', function(){
+                //animacion completada
+                $('#writting').text('');
+            });
+        });
+        $( "#msg" ).focus(function() { //capturar user escribiendo
+            socket.emit('user_writting', id);
+            $("#msg").blur(function(){
+                console.log("he activado blur");
+                socket.emit('user_not_writting');
+            });
+        });
+
     });
 
 </script>

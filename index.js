@@ -33,6 +33,12 @@ io.on('connection', function(socket){
             io.emit('chat message', msg);
             console.log('msg= ' + msg['nick'] + ' ' + msg['content']);
         });
+        socket.on('user_writting',function(msg){
+            socket.broadcast.emit('user_writting', msg);
+        });
+        socket.on('user_not_writting',function(){
+           socket.broadcast.emit('user_not_writting');
+        });
         socket.on('disconnect', function () {
             io.emit('del_user_conn', id_user[socket.id]);
             var index = users_conn.indexOf(id_user[socket.id]);
